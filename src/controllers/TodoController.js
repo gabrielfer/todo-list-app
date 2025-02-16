@@ -33,6 +33,7 @@ class TodoController {
             if (!updatedTodo) {
                 return res.status(404).json({ message: 'Task not found' });
             }
+            res.status(200).json({ message: 'Task updated' });
         } catch (err) {
             res.status(500).json({ message: err.message });
 
@@ -46,7 +47,7 @@ class TodoController {
             if (!deletedTodo) {
                 res.status(404).json({ message: 'Task todo found' });
             }
-            res.status(200).json({message: 'Task deleted with success'});
+            res.status(200).json({ message: 'Task deleted with success' });
         } catch (err) {
             res.status(500).json({ message: err.message });
 
