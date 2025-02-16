@@ -1,5 +1,5 @@
 import express from 'express';
-import TodoService from '../service/TodoService';
+import TodoService from '../service/TodoService.js';
 
 const router = express.Router();
 
