@@ -26,7 +26,7 @@ class Todo {
             );
 
         } catch { err; } {
-            console.error('❌ Erro ao criar todo:', err);
+            console.error('❌ Error during todo creation:', err);
             throw err;
         }
     }
@@ -38,7 +38,7 @@ class Todo {
             const result = await pool.query(query);
             return result.rows.map(row => new Todo(row.id, row.task, row.completed, row.created_at));
         } catch (err) {
-            console.error('❌ Erro ao buscar todos:', err);
+            console.error('❌ Error during todos search:', err);
             throw err;
         }
     }
@@ -62,7 +62,7 @@ class Todo {
                 result.rows[0].created_at
             );
         } catch (err) {
-            console.error('❌ Erro ao atualizar todo:', errr);
+            console.error('❌ Error during todo update:', err);
             throw err;
 
         }

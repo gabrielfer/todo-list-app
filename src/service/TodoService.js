@@ -5,8 +5,8 @@ class TodoService {
         try {
             return await todo.create(task);
         } catch (err) {
-            console.err('❌ Erro ao criar todo:', err);
-            throw new Error('Erro ao criar tarefa');
+            console.err('❌ Error during todo creation:', err);
+            throw new Error('Error during todo creation');
         }
     }
 
@@ -14,32 +14,30 @@ class TodoService {
         try {
             return await todo.getAll();
         } catch (err) {
-            console.error('❌ Erro ao buscar todos:', err);
-
-            throw new Error('Erro ao buscar tarefas');
-
+            console.error('❌ Error during todos search:', err);
+            throw new Error('Error during todos search');
         }
     }
 
     static async updateTodo(id, task, completed) {
         try {
             const updatedTodo = await todo.update(id, task, completed);
-            if (!updatedTodo) throw new Error('Tarefa não encontrada');
+            if (!updatedTodo) throw new Error('Todo not found');
             return updatedTodo;
         } catch (err) {
-            console.error('❌ Erro ao atualizar todo:', err);
-            throw new Error('Erro ao atualizar a tarefa');
+            console.error('❌ Error during todo update:', err);
+            throw new Error('Error during todo update');
         }
     }
 
     static async deleteTodo(id) {
         try {
             const deleted = await todo.delete(id);
-            if (!deleted) throw new Error('Tarefa não encontrada');
-            return { message: 'Tarefa deletada com sucesso!' };
+            if (!deleted) throw new Error('Todo not found');
+            return { message: 'Todo deleted with success!' };
         } catch (err) {
-            console.error('❌ Erro ao deletar todo', err);
-            throw new Error('Erro ao deletar a tarefa');
+            console.error('❌ Error during todo delete', err);
+            throw new Error('Error during todo delete');
         }
     }
 }

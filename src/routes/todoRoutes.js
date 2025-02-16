@@ -1,59 +1,51 @@
 import express from 'express';
-import crypto from 'crypto';
+import TodoService from '../service/TodoService';
 
 const router = express.Router();
 
-let todos = []; // In memory data
-
-router.get('/', (req, res) => {
-    res.json(todos);
+router.get('/', async (req, res) => {
+    try {
+        const todos = await TodoService.getAllTodos();
+        res.status(200).json(todos);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 });
 
-router.post('/', (req, res) => {
-    const { task } = req.body;
-    if (!task) return res.status(400).json({ message: 'Task is required!' });
-
-    const newTodo = {
-        id: crypto.randomUUID(),
-        task,
-        completed: false,
-        date: new Date().toISOString()
-    };
-
-    todos.push(newTodo);
-
-    res.status(201).json(newTodo);
+router.post('/', async (req, res) => {
+    try {
+        const { task } = req.body;
+        if (!task) return res.status(400).json({ message: 'Task is required!' });
+        const newTodo = await TodoService.createTodo(task);
+        res.status(201).json(newTodo);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 });
 
-router.put('/:id', (req, res) => {
-    const { id } = req.params;
-    const { task, completed } = req.body;
-
-    const todo = todos.find(todo => todo.id === id);
-    if (!todo) return res.status(404).json({ message: 'Todo not found!' });
-
-    if (task !== undefined) {
-        todo.task = task;
+router.put('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { task, completed } = req.body;
+        const updatedTodo = await TodoService.updateTodo(id, task, completed);
+        if (!updatedTodo) return res.status(404).json({ message: 'Todo not found!' })
+        res.status(200).json(updatedTodo);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
     }
-
-    if (completed !== undefined) {
-        todo.completed = completed;
-    }
-
-    res.status(200).json({ message: 'Todo updated', todo });
 });
 
-router.delete('/:id', (req, res) => {
-    const { id } = req.params;
-    const initalLength = todos.length;
+router.delete('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deleted = await TodoService.deleteTodo(id);
+        if (!deleted) return res.status(404).json({ message: 'Todo not found!' })
+        res.status(200).json({ message: 'Tarefa deletada com sucesso' });
 
-    todos = todos.filter(todo => todo.id !== id);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
 
-    if (todos.length === initalLength) {
-        res.status(404).json({ message: 'Task not found' });
     }
-
-    res.status(200).json({ message: 'Todo deleted!' });
 });
 
 export default router;
