@@ -11,13 +11,13 @@ class Todo {
     static async create(task) {
         const id = crypto.randomUUID();
         const query = `
-            INSERT INTO todos (task) 
+            INSERT INTO todos (id, task) 
             VALUES ($1, $2) 
             RETURNING *;
         `;
 
         try {
-            const result = await pool.query(query, [task]);
+            const result = await pool.query(query, [id, task]);
             return new Todo(
                 result.rows[0].id,
                 result.rows[0].task,
@@ -25,7 +25,7 @@ class Todo {
                 result.rows[0].created_at
             );
 
-        } catch { err; } {
+        } catch { err } {
             console.error('❌ Error during todo creation:', err);
             throw err;
         }

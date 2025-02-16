@@ -5,7 +5,7 @@ class TodoService {
         try {
             return await todo.create(task);
         } catch (err) {
-            console.err('❌ Error during todo creation:', err);
+            console.error('❌ Error during todo creation:', err);
             throw new Error('Error during todo creation');
         }
     }
