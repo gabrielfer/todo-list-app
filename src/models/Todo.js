@@ -1,4 +1,4 @@
-import pool from "../../config/db";
+import pool from '../../config/db';
 
 class Todo {
     constructor(task) {
@@ -25,21 +25,21 @@ class Todo {
                 result.rows[0].created_at
             );
 
-        } catch { err } {
+        } catch { err; } {
             console.error('❌ Erro ao criar todo:', err);
             throw err;
         }
     }
 
     static async getAll() {
-        const query = `SELECT * FROM todos ORDER BY created_at DESC;`;
+        const query = 'SELECT * FROM todos ORDER BY created_at DESC;';
 
         try {
             const result = await pool.query(query);
             return result.rows.map(row => new Todo(row.id, row.task, row.completed, row.created_at));
         } catch (err) {
             console.error('❌ Erro ao buscar todos:', err);
-            throw err
+            throw err;
         }
     }
 
@@ -69,7 +69,7 @@ class Todo {
     }
 
     static async delete(id) {
-        const query = `DELETE FROM todos WHERE id = $1 RETURNING *;`;
+        const query = 'DELETE FROM todos WHERE id = $1 RETURNING *;';
 
         try {
             const result = pool.query(query);
@@ -77,7 +77,7 @@ class Todo {
 
         } catch (err) {
             console.error('❌ Erro ao deletar todo:', error);
-            throw err
+            throw err;
         }
     }
 }
