@@ -4,8 +4,8 @@ class TodoService {
     static async createTodo(task) {
         try {
             return await todo.create(task);
-        } catch (err) {
-            console.error('❌ Error during todo creation:', err);
+        } catch (error) {
+            console.error('❌ Error during todo creation:', error);
             throw new Error('Error during todo creation');
         }
     }

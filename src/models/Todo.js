@@ -1,11 +1,12 @@
 import pool from '../../config/db.js';
+import crypto from 'crypto';
 
 class Todo {
-    constructor(task) {
-        this.id = crypto.randomUUID();
+    constructor(id = crypto.randomUUID(), task, completed = false, date = new Date().toISOString()) {
+        this.id = id;
         this.task = task;
-        this.completed = false;
-        this.date = new Date().toISOString();
+        this.completed = completed;
+        this.date = date;
     }
 
     static async create(task) {
@@ -25,7 +26,7 @@ class Todo {
                 result.rows[0].created_at
             );
 
-        } catch { err } {
+        } catch (err) {
             console.error('❌ Error during todo creation:', err);
             throw err;
         }
@@ -72,11 +73,11 @@ class Todo {
         const query = 'DELETE FROM todos WHERE id = $1 RETURNING *;';
 
         try {
-            const result = pool.query(query);
-            return (await result).rowCount > 0;
+            const result = await pool.query(query, [id]);
+            return result.rowCount > 0;
 
         } catch (err) {
-            console.error('❌ Erro ao deletar todo:', error);
+            console.error('❌ Erro ao deletar todo:', err);
             throw err;
         }
     }
