@@ -31,17 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 li.innerHTML = `
                     <div class="task-container">
-                        <input type="checkbox" class="toggle" ${todo.completed ? 'checked' : ''} onchange="toggleTodo('${todo.id}', ${todo.completed})">
+                        <input type="checkbox" class="toggle" ${todo.completed ? 'checked' : ''} data-id="${todo.id}">
                         <span class="task-text" data-id="${todo.id}">${todo.task}</span>
                         <input type="text" class="task-input" value="${todo.task}" data-id="${todo.id}">
                     </div>
                     <div class="action-buttons">
-                        <button class="delete" onclick="deleteTodo('${todo.id}')">🗑️</button>
+                        <button class="delete" data-id="${todo.id}">🗑️</button>
                     </div>
                 `;
 
                 const taskText = li.querySelector('.task-text');
                 const taskInput = li.querySelector('.task-input');
+                const deleteBtn = li.querySelector('.delete');
 
                 // Enable inline editing when clicking the task text
                 taskText.addEventListener('click', () => {
@@ -56,6 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (event.key === 'Enter') {
                         saveTaskEdit(taskInput, taskText);
                     }
+                });
+
+                // 🟢 Attach delete functionality using event listener
+                deleteBtn.addEventListener('click', () => {
+                    deleteTodo(todo.id);
                 });
 
                 taskList.appendChild(li);
@@ -134,6 +140,19 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('❌ Error updating task:', error);
         }
+    }
+
+    // 🟢 Delete a task when clicking the trash icon
+    function deleteTodo(id) {  // ✅ Make deleteTodo available in script scope
+        fetch(`/api/todos/${id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) throw new Error('Error deleting task');
+            console.log(`Task deleted: ${id}`);
+            fetchTodos(); // Refresh task list
+        })
+        .catch(error => console.error('❌ Error deleting task:', error));
     }
 
     // 🟢 Fetch tasks when the page loads
