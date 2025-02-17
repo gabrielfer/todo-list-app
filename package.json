@@ -9,6 +9,7 @@
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
+    "migrate": "node src/migrations/createTodosTable.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint . --fix"
   },
