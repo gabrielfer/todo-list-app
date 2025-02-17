@@ -2,55 +2,65 @@ import TodoService from '../service/TodoService.js';
 
 class TodoController {
 
-    static async getAllTodos(req, res) {
+    static async getAllTodos(req, res, next) {
         try {
             const todos = await TodoService.getAllTodos();
-            res.status(200).json(todos);
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-        }
-    }
-
-    static async createTodo(req, res) {
-        try {
-            const { task } = req.body;
-            if (!task) {
-                return res.status(400).json({ message: 'Task field is required' });
+            if (!todos || todos.length === 0) {
+                return next({ name: "NotFoundError", status: 404, details: "No tasks found" });
             }
-
-            const newTodo = await TodoService.createTodo(task);
-            res.status(201).json(newTodo);
-        } catch (err) {
-            res.status(500).json({ message: err.message });
+            res.status(200).json({ data: todos });
+        } catch (error) {
+            next({ name: "DatabaseError", details: error.message });
         }
     }
 
-    static async updateTodo(req, res) {
+    static async createTodo(req, res, next) {
+        const { task } = req.body;
+        if (!task || task.trim() === '') {
+            return next({ name: "MissingFieldsError", status: 400, missingFields: "task" });
+        }
+    
         try {
-            const { id } = req.params;
-            const { task, completed } = req.body;
+            const newTodo = await TodoService.createTodo(task);
+            res.status(201).json({ message: "Task created successfully", data: newTodo });
+        } catch (error) {
+            next({ name: "DatabaseError", details: error.message });
+        }
+    }
+
+    static async updateTodo(req, res, next) {
+        const { id } = req.params;
+        const { task, completed } = req.body;
+    
+        if (!task && completed === undefined) {
+            return next({ name: "BadRequestError", details: "Provide either 'task' or 'completed' field for update" });
+        }
+    
+        try {
             const updatedTodo = await TodoService.updateTodo(id, task, completed);
             if (!updatedTodo) {
-                return res.status(404).json({ message: 'Task not found' });
+                return next({ name: "NotFoundError", status: 404, details: "Task not found" }); // ✅ Properly handle NotFoundError
             }
-            res.status(200).json({ message: 'Task updated' });
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-
+            res.status(200).json({ message: "Task updated successfully", data: updatedTodo });
+        } catch (error) {
+            next({ name: "DatabaseError", details: error.message });
         }
     }
 
-    static async deleteTodo(req, res) {
+    static async deleteTodo(req, res, next) {
+        const { id } = req.params;
+        if (!id) {
+            return next({ name: "BadRequestError", details: "Task ID is required" });
+        }
+    
         try {
-            const { id } = req.params;
-            const deletedTodo = TodoService.deleteTodo(id);
-            if (!deletedTodo) {
-                res.status(404).json({ message: 'Task todo found' });
+            const deleted = await TodoService.deleteTodo(id);
+            if (!deleted) {
+                return next({ name: "NotFoundError", status: 404, details: "Task not found or already deleted" }); // ✅ Properly handle NotFoundError
             }
-            res.status(200).json({ message: 'Task deleted with success' });
-        } catch (err) {
-            res.status(500).json({ message: err.message });
-
+            res.status(200).json({ message: "Task deleted successfully" });
+        } catch (error) {
+            next({ name: "DatabaseError", details: error.message });
         }
     }
 }

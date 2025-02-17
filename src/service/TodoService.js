@@ -1,43 +1,43 @@
-import todo from '../models/todo.js';
+import Todo from '../models/Todo.js';
 
 class TodoService {
-    static async createTodo(task) {
+    static async getAllTodos() {
         try {
-            return await todo.create(task);
+            return await Todo.getAll();
         } catch (error) {
-            console.error('❌ Error during todo creation:', error);
-            throw new Error('Error during todo creation');
+            console.error('❌ Error retrieving todos:', error);
+            throw new Error("Database operation failed");
         }
     }
 
-    static async getAllTodos() {
+    static async createTodo(task) {
         try {
-            return await todo.getAll();
-        } catch (err) {
-            console.error('❌ Error during todos search:', err);
-            throw new Error('Error during todos search');
+            return await Todo.create(task);
+        } catch (error) {
+            console.error('❌ Error creating todo:', error);
+            throw new Error("Database operation failed");
         }
     }
 
     static async updateTodo(id, task, completed) {
         try {
-            const updatedTodo = await todo.update(id, task, completed);
-            if (!updatedTodo) throw new Error('Todo not found');
+            const updatedTodo = await Todo.update(id, task, completed);
+            if (!updatedTodo) return null;  // ✅ Properly handle not found cases
             return updatedTodo;
-        } catch (err) {
-            console.error('❌ Error during todo update:', err);
-            throw new Error('Error during todo update');
+        } catch (error) {
+            console.error('❌ Error updating todo:', error);
+            throw new Error("Database operation failed");
         }
     }
 
     static async deleteTodo(id) {
         try {
-            const deleted = await todo.delete(id);
-            if (!deleted) throw new Error('Todo not found');
-            return { message: 'Todo deleted with success!' };
-        } catch (err) {
-            console.error('❌ Error during todo delete', err);
-            throw new Error('Error during todo delete');
+            const deleted = await Todo.delete(id);
+            if (!deleted) return null;  // ✅ Properly handle not found cases
+            return true;
+        } catch (error) {
+            console.error('❌ Error deleting todo:', error);
+            throw new Error("Database operation failed");
         }
     }
 }

@@ -14,14 +14,14 @@ document.addEventListener('DOMContentLoaded', () => {
             const todos = await res.json();
             console.log('Received tasks:', todos);
 
-            if (!Array.isArray(todos) || todos.length === 0) {
+            if (!Array.isArray(todos.data) || todos.data.length === 0) {
                 taskList.innerHTML = '<p>No tasks available.</p>';
                 return;
             }
 
             taskList.innerHTML = ''; // Clear the list before rendering
 
-            todos.forEach(todo => {
+            todos.data.forEach(todo => {
                 console.log(`Rendering task: ${todo.task}`);
 
                 const li = document.createElement('li');
