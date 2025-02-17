@@ -6,7 +6,7 @@ class TodoService {
             return await Todo.getAll();
         } catch (error) {
             console.error('❌ Error retrieving todos:', error);
-            throw new Error("Database operation failed");
+            throw new Error('Database operation failed');
         }
     }
 
@@ -15,7 +15,7 @@ class TodoService {
             return await Todo.create(task);
         } catch (error) {
             console.error('❌ Error creating todo:', error);
-            throw new Error("Database operation failed");
+            throw new Error('Database operation failed');
         }
     }
 
@@ -26,7 +26,7 @@ class TodoService {
             return updatedTodo;
         } catch (error) {
             console.error('❌ Error updating todo:', error);
-            throw new Error("Database operation failed");
+            throw new Error('Database operation failed');
         }
     }
 
@@ -37,7 +37,7 @@ class TodoService {
             return true;
         } catch (error) {
             console.error('❌ Error deleting todo:', error);
-            throw new Error("Database operation failed");
+            throw new Error('Database operation failed');
         }
     }
 }
