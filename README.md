@@ -1,4 +1,4 @@
-odo List App
+Todo List App
 
 📌 Overview
 
