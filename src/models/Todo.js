@@ -37,6 +37,10 @@ class Todo {
 
         try {
             const result = await pool.query(query);
+            if (result.rows.length === 0) {
+                return []; 
+            }
+
             return result.rows.map(row => new Todo(row.id, row.task, row.completed, row.created_at));
         } catch (err) {
             console.error('❌ Error during todos search:', err);
@@ -77,7 +81,7 @@ class Todo {
             return result.rowCount > 0;
 
         } catch (err) {
-            console.error('❌ Erro ao deletar todo:', err);
+            console.error('❌ Error during todo delete:', err);
             throw err;
         }
     }
