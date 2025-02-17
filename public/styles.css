@@ -1,48 +1,166 @@
+/* Basic reset */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
     background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* Centers everything vertically */
 }
 
+/* Center the title */
+h1 {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+/* Centering the main container */
 .todo-container {
     background: white;
     padding: 20px;
-    width: 300px;
-    margin: 20px auto;
+    width: 400px; /* Fixed width */
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-input {
-    width: 80%;
+/* Input and Add button in the same row */
+.input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+}
+
+/* Adjust input field */
+#taskInput {
+    flex-grow: 1;
     padding: 8px;
-    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    outline: none;
+    font-size: 14px;
 }
 
-button {
+/* Fix the button alignment */
+#addTaskBtn {
     padding: 8px 15px;
     cursor: pointer;
     background-color: #28a745;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
+    font-size: 14px;
+    white-space: nowrap;
 }
 
+#addTaskBtn:hover {
+    background-color: #218838;
+}
+
+/* Task list */
 ul {
     list-style: none;
     padding: 0;
+    margin-top: 10px;
+    width: 100%;
 }
 
+/* Fix task items alignment */
 li {
     display: flex;
+    align-items: center;
     justify-content: space-between;
     padding: 10px;
     background: #fff;
     margin: 5px 0;
     border-radius: 5px;
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Keeps it inside the container */
+    box-sizing: border-box; /* Prevents it from overflowing */
 }
 
+/* Properly align the task content */
+.task-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-grow: 1;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Task text aligned to the left */
+.task-text {
+    font-size: 16px;
+    cursor: pointer;
+    flex-grow: 1;
+    text-align: left;
+}
+
+/* Editable task input (hidden by default) */
+.task-input {
+    display: none;
+    border: none;
+    background: none;
+    font-size: 16px;
+    width: 100%;
+    outline: none;
+    text-align: left;
+}
+
+/* Show input only when editing */
+.task-input.editing {
+    display: inline;
+}
+
+/* Hide task text when editing */
+.task-text.editing {
+    display: none;
+}
+
+/* Indicate completed tasks */
+.completed {
+    text-decoration: line-through;
+    color: gray;
+    background-color: #d4edda;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+/* Checkbox */
+input[type="checkbox"] {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+/* Button container */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 10px; /* Ensure the trash icon is correctly aligned */
+}
+
+/* Delete button properly aligned */
 button.delete {
-    background-color: red;
+    color: red;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+button.delete:hover {
+    opacity: 0.7;
 }
